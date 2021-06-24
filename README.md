@@ -1,9 +1,9 @@
-# responsive_table
+# flutter_responsive_table
 
 This is a fork from kechankrisna package but null-safety while his package get null-safety.
 
 I recommend you to use its when null-safety PR well
-# responsive_table
+# flutter_responsive_table
 
 Responsive Data table is a highly flexible tool built upon the foundations of progressive enhancement, that adds all of these advanced features to any flutter table.
 

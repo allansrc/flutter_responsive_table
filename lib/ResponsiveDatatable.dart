@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_responsive_table/responsive_table.dart';
 import 'package:responsive_context/responsive_context.dart';
+
+import 'responsive_table.dart';
 
 class ResponsiveDatatable extends StatefulWidget {
   final bool showSelect;
@@ -110,11 +111,11 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
                   Spacer(),
                   if (widget.showSelect && widget.selectedValues != null)
                     Checkbox(
-                        // ignore: prefer_contains
-                        value: widget.selectedValues!.indexOf(data) >= 0,
-                        onChanged: (value) {
-                          widget.onSelect!(value, data);
-                        }),
+                      value: widget.selectedValues!.contains(data),
+                      onChanged: (value) {
+                        widget.onSelect!(value, data);
+                      },
+                    ),
                 ],
               ),
               ...widget.headers
@@ -186,29 +187,30 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
               .where((header) => header.show == true)
               .map(
                 (header) => Expanded(
-                    flex: header.flex ?? 1,
-                    child: InkWell(
-                      onTap: () {
-                        if (widget.onSort != null && header.sortable!) widget.onSort!(header.value);
-                      },
-                      child: header.headerBuilder != null
-                          ? header.headerBuilder!(header.value)
-                          : Container(
-                              padding: EdgeInsets.all(11),
-                              alignment: headerAlignSwitch(header.textAlign),
-                              child: Wrap(
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  Text(
-                                    '${header.text}',
-                                    textAlign: header.textAlign,
-                                  ),
-                                  if (widget.sortColumn != null && widget.sortColumn == header.value)
-                                    widget.sortAscending! ? Icon(Icons.arrow_downward, size: 15) : Icon(Icons.arrow_upward, size: 15)
-                                ],
-                              ),
+                  flex: header.flex ?? 1,
+                  child: InkWell(
+                    onTap: () {
+                      if (widget.onSort != null && header.sortable!) widget.onSort!(header.value);
+                    },
+                    child: header.headerBuilder != null
+                        ? header.headerBuilder!(header.value)
+                        : Container(
+                            padding: EdgeInsets.all(11),
+                            alignment: headerAlignSwitch(header.textAlign),
+                            child: Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                Text(
+                                  '${header.text}',
+                                  textAlign: header.textAlign,
+                                ),
+                                if (widget.sortColumn != null && widget.sortColumn == header.value)
+                                  widget.sortAscending! ? Icon(Icons.arrow_downward, size: 15) : Icon(Icons.arrow_upward, size: 15)
+                              ],
                             ),
-                    )),
+                          ),
+                  ),
+                ),
               )
               .toList()
         ],
@@ -220,13 +222,14 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
     var widgets = <Widget>[];
     for (var index = 0; index < widget.source.length; index++) {
       final data = widget.source[index];
-      widgets.add(InkWell(
-        onTap: widget.onTabRow != null
-            ? () {
-                widget.onTabRow!(data);
-              }
-            : null,
-        child: Container(
+      widgets.add(
+        InkWell(
+          onTap: widget.onTabRow != null
+              ? () {
+                  widget.onTabRow!(data);
+                }
+              : null,
+          child: Container(
             padding: EdgeInsets.all(widget.showSelect ? 0 : 11),
             decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey[300]!, width: 1))),
             child: Row(
@@ -234,11 +237,11 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
               children: [
                 if (widget.showSelect && widget.selectedValues != null)
                   Checkbox(
-                      // ignore: prefer_contains
-                      value: widget.selectedValues!.indexOf(data) >= 0,
-                      onChanged: (value) {
-                        if (widget.onSelect != null) widget.onSelect!(value, data);
-                      }),
+                    value: widget.selectedValues!.contains(data),
+                    onChanged: (value) {
+                      if (widget.onSelect != null) widget.onSelect!(value, data);
+                    },
+                  ),
                 ...widget.headers
                     .where((header) => header.show == true)
                     .map(
@@ -262,8 +265,10 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
                     )
                     .toList()
               ],
-            )),
-      ));
+            ),
+          ),
+        ),
+      );
     }
     return widgets;
   }

@@ -16,6 +16,7 @@ class ResponsiveDatatable extends StatefulWidget {
 
   final Function(dynamic value)? onSort;
   final Function(dynamic value)? onTabRow;
+  final Function()? onScrollEnd;
   final Function(bool? value)? onSelectAll;
 
   final Function(bool? value, Map<String, dynamic> data)? onSelect;
@@ -43,6 +44,7 @@ class ResponsiveDatatable extends StatefulWidget {
     required this.onSelect,
     required this.headers,
     required this.source,
+    this.onScrollEnd,
   }) : super(key: key);
 
   @override
@@ -55,7 +57,8 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Checkbox(
-            value: widget.selectedValues!.length == widget.source.length && widget.source.isNotEmpty,
+            value: widget.selectedValues!.length == widget.source.length &&
+                widget.source.isNotEmpty,
             onChanged: (value) {
               widget.onSelectAll!(value);
             }),
@@ -74,8 +77,11 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
                           '${header.text}',
                           textAlign: header.textAlign,
                         ),
-                        if (widget.sortColumn != null && widget.sortColumn == header.value)
-                          widget.sortAscending! ? Icon(Icons.arrow_downward, size: 15) : Icon(Icons.arrow_upward, size: 15)
+                        if (widget.sortColumn != null &&
+                            widget.sortColumn == header.value)
+                          widget.sortAscending!
+                              ? Icon(Icons.arrow_downward, size: 15)
+                              : Icon(Icons.arrow_upward, size: 15)
                       ],
                     ),
                   ))
@@ -101,7 +107,9 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
               }
             : null,
         child: Container(
-          decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey[300]!, width: 1))),
+          decoration: BoxDecoration(
+              border: Border(
+                  bottom: BorderSide(color: Colors.grey[300]!, width: 1))),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -179,7 +187,9 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
         children: [
           if (widget.showSelect && widget.selectedValues != null)
             Checkbox(
-                value: widget.selectedValues!.length == widget.source.length && widget.source != null && widget.source.length > 0,
+                value: widget.selectedValues!.length == widget.source.length &&
+                    widget.source != null &&
+                    widget.source.length > 0,
                 onChanged: (value) {
                   if (widget.onSelectAll != null) widget.onSelectAll!(value);
                 }),
@@ -190,7 +200,8 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
                   flex: header.flex ?? 1,
                   child: InkWell(
                     onTap: () {
-                      if (widget.onSort != null && header.sortable!) widget.onSort!(header.value);
+                      if (widget.onSort != null && header.sortable!)
+                        widget.onSort!(header.value);
                     },
                     child: header.headerBuilder != null
                         ? header.headerBuilder!(header.value)
@@ -204,8 +215,11 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
                                   '${header.text}',
                                   textAlign: header.textAlign,
                                 ),
-                                if (widget.sortColumn != null && widget.sortColumn == header.value)
-                                  widget.sortAscending! ? Icon(Icons.arrow_downward, size: 15) : Icon(Icons.arrow_upward, size: 15)
+                                if (widget.sortColumn != null &&
+                                    widget.sortColumn == header.value)
+                                  widget.sortAscending!
+                                      ? Icon(Icons.arrow_downward, size: 15)
+                                      : Icon(Icons.arrow_upward, size: 15)
                               ],
                             ),
                           ),
@@ -231,7 +245,9 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
               : null,
           child: Container(
             padding: EdgeInsets.all(widget.showSelect ? 0 : 11),
-            decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey[300]!, width: 1))),
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: Colors.grey[300]!, width: 1))),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -239,7 +255,8 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
                   Checkbox(
                     value: widget.selectedValues!.contains(data),
                     onChanged: (value) {
-                      if (widget.onSelect != null) widget.onSelect!(value, data);
+                      if (widget.onSelect != null)
+                        widget.onSelect!(value, data);
                     },
                   ),
                 ...widget.headers
@@ -285,7 +302,9 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
       child: TextField(
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(0),
-          border: widget.hideUnderline! ? InputBorder.none : UnderlineInputBorder(borderSide: BorderSide(width: 1)),
+          border: widget.hideUnderline!
+              ? InputBorder.none
+              : UnderlineInputBorder(borderSide: BorderSide(width: 1)),
           alignLabelWithHint: true,
         ),
         textAlign: textAlign,
@@ -312,7 +331,9 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
                 if (widget.title != null || widget.actions != null)
                   Container(
                     padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey[300]!))),
+                    decoration: BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(color: Colors.grey[300]!))),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -325,7 +346,8 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
                 if (widget.autoHeight!)
                   Column(
                     children: [
-                      if (widget.showSelect && widget.selectedValues != null) mobileHeader(),
+                      if (widget.showSelect && widget.selectedValues != null)
+                        mobileHeader(),
                       if (widget.isLoading!) LinearProgressIndicator(),
                       //mobileList
                       ...mobileList(),
@@ -334,14 +356,25 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
                 if (!widget.autoHeight!)
                   Expanded(
                     child: Container(
-                      child: ListView(
-                        // itemCount: source.length,
-                        children: [
-                          if (widget.showSelect && widget.selectedValues != null) mobileHeader(),
-                          if (widget.isLoading!) LinearProgressIndicator(),
-                          //mobileList
-                          ...mobileList(),
-                        ],
+                      child: NotificationListener<ScrollNotification>(
+                        onNotification: (ScrollNotification scrollInfo) {
+                          if (scrollInfo.metrics.pixels ==
+                              scrollInfo.metrics.maxScrollExtent) {
+                            widget.onScrollEnd?.call();
+                          }
+                          return true;
+                        },
+                        child: ListView(
+                          // itemCount: source.length,
+                          children: [
+                            if (widget.showSelect &&
+                                widget.selectedValues != null)
+                              mobileHeader(),
+                            if (widget.isLoading!) LinearProgressIndicator(),
+                            //mobileList
+                            ...mobileList(),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -350,7 +383,9 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
                   Container(
                     child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [if (widget.footers != null) ...widget.footers!],
+                      children: [
+                        if (widget.footers != null) ...widget.footers!
+                      ],
                     ),
                   )
               ],
@@ -366,10 +401,15 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
                 if (widget.title != null || widget.actions != null)
                   Container(
                     padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey[300]!))),
+                    decoration: BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(color: Colors.grey[300]!))),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [if (widget.title != null) widget.title!, if (widget.actions != null) ...widget.actions!],
+                      children: [
+                        if (widget.title != null) widget.title!,
+                        if (widget.actions != null) ...widget.actions!
+                      ],
                     ),
                   ),
 
@@ -382,7 +422,19 @@ class _ResponsiveDatatableState extends State<ResponsiveDatatable> {
 
                 if (!widget.autoHeight!)
                   // desktopList
-                  if (widget.source.isNotEmpty) Expanded(child: Container(child: ListView(children: desktopList()))),
+                  if (widget.source.isNotEmpty)
+                    Expanded(
+                        child: Container(
+                            child: NotificationListener(
+                                onNotification:
+                                    (ScrollNotification scrollInfo) {
+                                  if (scrollInfo.metrics.pixels ==
+                                      scrollInfo.metrics.maxScrollExtent) {
+                                    widget.onScrollEnd?.call();
+                                  }
+                                  return true;
+                                },
+                                child: ListView(children: desktopList())))),
 
                 //footer
                 if (widget.footers != null)

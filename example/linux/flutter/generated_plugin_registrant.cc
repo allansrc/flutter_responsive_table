@@ -2,6 +2,8 @@
 //  Generated file. Do not edit.
 //
 
+// clang-format off
+
 #include "generated_plugin_registrant.h"
 
 #include <flutter_responsive_table/responsive_table_plugin.h>
